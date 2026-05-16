@@ -41,6 +41,12 @@ public class Order extends AggregateRoot<OrderId> {
         this.auditInfo = auditInfo;
     }
 
+    public static Order rehydrate(OrderId id, OrderNumber orderNumber, Customer customer,
+                                  OrderStatus status, List<OrderItem> items,
+                                  Money totalAmount, AuditInfo auditInfo) {
+        return new Order(id, orderNumber, customer, status, items, totalAmount, auditInfo);
+    }
+
     public static Order create(OrderNumber orderNumber, Customer customer,
                                List<OrderItem> items, String createdBy) {
         if (orderNumber == null) throw new IllegalArgumentException("OrderNumber must not be null");

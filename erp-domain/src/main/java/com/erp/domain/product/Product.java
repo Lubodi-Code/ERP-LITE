@@ -1,5 +1,8 @@
 package com.erp.domain.product;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+
 import com.erp.domain.common.AggregateRoot;
 import com.erp.domain.product.events.ProductCreated;
 import com.erp.domain.product.events.ProductDeactivated;
@@ -7,13 +10,10 @@ import com.erp.domain.product.events.ProductUpdated;
 import com.erp.domain.product.events.StockChanged;
 import com.erp.domain.shared.AuditInfo;
 import com.erp.domain.shared.Money;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.Instant;
 
 import static lombok.AccessLevel.PROTECTED;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -43,6 +43,12 @@ public class Product extends AggregateRoot<ProductId> {
         this.image = image;
         this.active = active;
         this.auditInfo = auditInfo;
+    }
+
+    public static Product rehydrate(ProductId id, SKU sku, ProductName name, String description,
+                                    Money price, Stock stock, CategoryReference category,
+                                    ProductImage image, boolean active, AuditInfo auditInfo) {
+        return new Product(id, sku, name, description, price, stock, category, image, active, auditInfo);
     }
 
     public static Product create(SKU sku, ProductName name, String description,

@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS products (
     name        VARCHAR(200)    NOT NULL,
     description TEXT,
     price       DECIMAL(15, 2)  NOT NULL CHECK (price >= 0),
+    currency    VARCHAR(3)      NOT NULL DEFAULT 'USD',
     stock       INT             NOT NULL DEFAULT 0 CHECK (stock >= 0),
     category_id VARCHAR(100),
     image_url   VARCHAR(500),

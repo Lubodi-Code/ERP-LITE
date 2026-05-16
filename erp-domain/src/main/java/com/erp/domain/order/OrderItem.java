@@ -25,6 +25,12 @@ public class OrderItem extends Entity<OrderItemId> {
         this.subtotal = subtotal;
     }
 
+    public static OrderItem rehydrate(OrderItemId id, com.erp.domain.product.ProductId productReference,
+                                      String productName, Quantity quantity,
+                                      Money unitPrice, Money subtotal) {
+        return new OrderItem(id, productReference, productName, quantity, unitPrice, subtotal);
+    }
+
     public static OrderItem from(Product product, Quantity quantity) {
         if (product == null) throw new IllegalArgumentException("Product must not be null");
         if (quantity == null) throw new IllegalArgumentException("Quantity must not be null");

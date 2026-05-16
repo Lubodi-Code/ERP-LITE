@@ -1,92 +1,92 @@
 -- =============================================================================
 -- PRODUCTS (20 rows)
 -- =============================================================================
-INSERT INTO products (id, sku, name, description, price, stock, category_id, image_url, active) VALUES
+INSERT INTO products (id, sku, name, description, price, stock, category_id, image_url, active, currency) VALUES
 
 -- Electronics (1-4)
 ('11111111-1111-1111-1111-111111111111', 'LAPTOP-001', 'ProBook Laptop 15"',
  'High-performance laptop with Intel Core i7 and 16GB RAM', 1299.99, 45, 'cat-electronics',
- 'https://assets.erp-lite.com/products/laptop-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/laptop-001.jpg', TRUE, 'USD'),
 
 ('22222222-2222-2222-2222-222222222222', 'MOUSE-001', 'Wireless Ergonomic Mouse',
  'Ergonomic wireless mouse with 2.4GHz connectivity and 1-year battery life', 39.99, 120, 'cat-electronics',
- 'https://assets.erp-lite.com/products/mouse-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/mouse-001.jpg', TRUE, 'USD'),
 
 ('33333333-3333-3333-3333-333333333333', 'MONITOR-001', '27" 4K UHD Monitor',
  '27-inch 4K Ultra HD IPS display with 144Hz refresh rate', 499.99, 30, 'cat-electronics',
- 'https://assets.erp-lite.com/products/monitor-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/monitor-001.jpg', TRUE, 'USD'),
 
 ('44444444-4444-4444-4444-444444444444', 'KEYBOARD-001', 'Mechanical Keyboard TKL',
  'Tenkeyless mechanical keyboard with Cherry MX Red switches and RGB backlight', 129.99, 75, 'cat-electronics',
- 'https://assets.erp-lite.com/products/keyboard-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/keyboard-001.jpg', TRUE, 'USD'),
 
 -- Furniture (5-8)
 ('55555555-5555-5555-5555-555555555555', 'CHAIR-001', 'Ergonomic Office Chair',
  'Fully adjustable lumbar support chair with breathable mesh back', 349.99, 20, 'cat-furniture',
- 'https://assets.erp-lite.com/products/chair-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/chair-001.jpg', TRUE, 'USD'),
 
 ('66666666-6666-6666-6666-666666666666', 'DESK-001', 'Standing Desk 140x70cm',
  'Electric height-adjustable standing desk with memory presets', 599.99, 12, 'cat-furniture',
- 'https://assets.erp-lite.com/products/desk-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/desk-001.jpg', TRUE, 'USD'),
 
 ('77777777-7777-7777-7777-777777777777', 'SHELF-001', 'Modular Bookshelf 5-tier',
  'Modern five-tier modular bookshelf in walnut finish', 189.99, 25, 'cat-furniture',
- 'https://assets.erp-lite.com/products/shelf-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/shelf-001.jpg', TRUE, 'USD'),
 
 ('88888888-8888-8888-8888-888888888888', 'CABINET-001', 'Filing Cabinet 3-drawer',
  'Steel three-drawer lateral filing cabinet with lock', 249.99, 18, 'cat-furniture',
- 'https://assets.erp-lite.com/products/cabinet-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/cabinet-001.jpg', TRUE, 'USD'),
 
 -- Accessories (9-12)
 ('99999999-9999-9999-9999-999999999999', 'BAG-001', 'Laptop Backpack 30L',
  'Water-resistant 30L backpack with padded laptop compartment up to 17"', 79.99, 60, 'cat-accessories',
- 'https://assets.erp-lite.com/products/bag-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/bag-001.jpg', TRUE, 'USD'),
 
 ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'HEADSET-001', 'Noise-Cancelling Headset',
  'Over-ear wireless headset with active noise cancellation and 30h battery', 199.99, 40, 'cat-accessories',
- 'https://assets.erp-lite.com/products/headset-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/headset-001.jpg', TRUE, 'USD'),
 
 ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'WEBCAM-001', '1080p HD Webcam',
  'Full HD webcam with built-in microphone and autofocus', 89.99, 55, 'cat-accessories',
- 'https://assets.erp-lite.com/products/webcam-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/webcam-001.jpg', TRUE, 'USD'),
 
 ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'DOCK-001', 'USB-C Docking Station 12-in-1',
  '12-in-1 USB-C hub with dual HDMI, 4K support, 100W PD, and Ethernet', 149.99, 35, 'cat-accessories',
- 'https://assets.erp-lite.com/products/dock-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/dock-001.jpg', TRUE, 'USD'),
 
 -- Stationery (13-16)
 ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'PEN-001', 'Gel Pen Set 12-pack',
  'Premium gel pens with 0.5mm tip, assorted colors, smooth writing', 12.99, 200, 'cat-stationery',
- 'https://assets.erp-lite.com/products/pen-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/pen-001.jpg', TRUE, 'USD'),
 
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'NOTEBOOK-001', 'Hardcover Notebook A5',
  'Dot-grid hardcover notebook 200 pages, lay-flat binding', 19.99, 150, 'cat-stationery',
- 'https://assets.erp-lite.com/products/notebook-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/notebook-001.jpg', TRUE, 'USD'),
 
 ('ffffffff-ffff-ffff-ffff-ffffffffffff', 'PLANNER-001', 'Weekly Planner 2025',
  'Undated weekly planner with goal-setting section and habit tracker', 24.99, 90, 'cat-stationery',
- 'https://assets.erp-lite.com/products/planner-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/planner-001.jpg', TRUE, 'USD'),
 
 ('10101010-1010-1010-1010-101010101010', 'MARKERS-001', 'Whiteboard Marker Set 8-pack',
  'Dry-erase whiteboard markers, chisel tip, low-odor ink', 14.99, 180, 'cat-stationery',
- 'https://assets.erp-lite.com/products/markers-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/markers-001.jpg', TRUE, 'USD'),
 
 -- Mixed extras (17-20)
 ('20202020-2020-2020-2020-202020202020', 'LAMP-001', 'LED Desk Lamp with USB Port',
  'Adjustable LED desk lamp with 5 brightness levels and USB charging port', 45.99, 70, 'cat-electronics',
- 'https://assets.erp-lite.com/products/lamp-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/lamp-001.jpg', TRUE, 'USD'),
 
 ('30303030-3030-3030-3030-303030303030', 'CABLE-001', 'USB-C Cable 2m Braided',
  '2-meter braided USB-C to USB-C cable, 100W fast charging, 10Gbps', 19.99, 250, 'cat-accessories',
- 'https://assets.erp-lite.com/products/cable-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/cable-001.jpg', TRUE, 'USD'),
 
 ('40404040-4040-4040-4040-404040404040', 'STAND-001', 'Laptop Stand Adjustable',
  'Aluminium adjustable laptop stand with 6 height levels, foldable', 34.99, 85, 'cat-accessories',
- 'https://assets.erp-lite.com/products/stand-001.jpg', TRUE),
+ 'https://assets.erp-lite.com/products/stand-001.jpg', TRUE, 'USD'),
 
 ('50505050-5050-5050-5050-505050505050', 'SCANNER-001', 'Portable Document Scanner',
  'Wireless portable scanner, 600 DPI, scans to PDF/JPEG, battery-powered', 179.99, 22, 'cat-electronics',
- 'https://assets.erp-lite.com/products/scanner-001.jpg', TRUE);
+ 'https://assets.erp-lite.com/products/scanner-001.jpg', TRUE, 'USD');
 
 -- =============================================================================
 -- ORDERS (15 rows)
