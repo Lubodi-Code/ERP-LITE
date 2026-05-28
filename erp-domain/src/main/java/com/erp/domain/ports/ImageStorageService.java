@@ -1,10 +1,12 @@
 package com.erp.domain.ports;
 
+import com.erp.domain.product.ProductImage;
+
 public interface ImageStorageService {
 
-    String upload(String fileName, byte[] content);
+    ProductImage upload(ProductImage image, String imageName, byte[] imageData);
 
-    void delete(String imageUrl);
+    void delete(ProductImage image);
 
-    byte[] download(String imageUrl);
+    byte[] download(ProductImage image);
 }

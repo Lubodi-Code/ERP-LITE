@@ -11,4 +11,8 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-redis'
     api 'org.springframework.boot:spring-boot-starter-cache'
     runtimeOnly 'org.postgresql:postgresql'
+
+    // AWS SDK v2 — S3
+    implementation 'software.amazon.awssdk:s3:2.25.6'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }

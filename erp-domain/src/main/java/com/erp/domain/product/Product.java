@@ -6,6 +6,7 @@ import java.time.Instant;
 import com.erp.domain.common.AggregateRoot;
 import com.erp.domain.product.events.ProductCreated;
 import com.erp.domain.product.events.ProductDeactivated;
+import com.erp.domain.product.events.ProductImageUploaded;
 import com.erp.domain.product.events.ProductUpdated;
 import com.erp.domain.product.events.StockChanged;
 import com.erp.domain.shared.AuditInfo;
@@ -110,6 +111,12 @@ public class Product extends AggregateRoot<ProductId> {
         if (this.active) throw new IllegalStateException("Product is already active");
         this.active = true;
         this.auditInfo = auditInfo.updateTimestamp();
+    }
+
+    public void uploadImage(ProductImage image) {
+        this.image = image;
+        this.auditInfo = auditInfo.updateTimestamp();
+        registerEvent(new ProductImageUploaded(this.id, image, Instant.now()));
     }
 
     public boolean hasAvailableStock(int requiredQuantity) {

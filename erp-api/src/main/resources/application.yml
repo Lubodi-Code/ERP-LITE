@@ -1,6 +1,8 @@
 spring:
   application:
     name: erp-lite-api
+  config:
+    import: aws.yml
 
   # PostgreSQL
   datasource:
