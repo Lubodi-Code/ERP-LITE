@@ -1,9 +1,15 @@
-package com.erp.domain.product;
+package com.erp.domain.entities;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 import com.erp.domain.common.AggregateRoot;
+import com.erp.domain.product.CategoryReference;
+import com.erp.domain.product.ProductId;
+import com.erp.domain.product.ProductImage;
+import com.erp.domain.product.ProductName;
+import com.erp.domain.product.SKU;
+import com.erp.domain.product.Stock;
 import com.erp.domain.product.events.ProductCreated;
 import com.erp.domain.product.events.ProductDeactivated;
 import com.erp.domain.product.events.ProductImageUploaded;
@@ -18,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Product extends AggregateRoot<ProductId> {
+public class ProductRoot extends AggregateRoot<ProductId> {
 
     private ProductId id;
     private SKU sku;
@@ -31,7 +37,7 @@ public class Product extends AggregateRoot<ProductId> {
     private boolean active;
     private AuditInfo auditInfo;
 
-    Product(ProductId id, SKU sku, ProductName name, String description,
+    ProductRoot(ProductId id, SKU sku, ProductName name, String description,
             Money price, Stock stock, CategoryReference category,
             ProductImage image, boolean active, AuditInfo auditInfo) {
         this.id = id;
@@ -46,13 +52,13 @@ public class Product extends AggregateRoot<ProductId> {
         this.auditInfo = auditInfo;
     }
 
-    public static Product rehydrate(ProductId id, SKU sku, ProductName name, String description,
+    public static ProductRoot rehydrate(ProductId id, SKU sku, ProductName name, String description,
                                     Money price, Stock stock, CategoryReference category,
                                     ProductImage image, boolean active, AuditInfo auditInfo) {
-        return new Product(id, sku, name, description, price, stock, category, image, active, auditInfo);
+        return new ProductRoot(id, sku, name, description, price, stock, category, image, active, auditInfo);
     }
 
-    public static Product create(SKU sku, ProductName name, String description,
+    public static ProductRoot create(SKU sku, ProductName name, String description,
                                  Money price, Stock stock, CategoryReference category,
                                  ProductImage image, String createdBy) {
         if (price.amount().compareTo(BigDecimal.ZERO) <= 0)
@@ -60,7 +66,7 @@ public class Product extends AggregateRoot<ProductId> {
 
         ProductId id = ProductId.generate();
         AuditInfo audit = AuditInfo.create(createdBy, Instant.now());
-        Product product = new Product(id, sku, name, description, price, stock, category, image, true, audit);
+        ProductRoot product = new ProductRoot(id, sku, name, description, price, stock, category, image, true, audit);
         product.registerEvent(new ProductCreated(id, sku, name, price, audit.createdAt()));
         return product;
     }

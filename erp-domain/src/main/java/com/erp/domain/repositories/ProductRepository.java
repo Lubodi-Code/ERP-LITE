@@ -1,7 +1,7 @@
 package com.erp.domain.repositories;
 
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.product.CategoryReference;
-import com.erp.domain.product.Product;
 import com.erp.domain.product.ProductId;
 import com.erp.domain.product.SKU;
 
@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    Product save(Product product);
+    ProductRoot save(ProductRoot product);
 
-    Optional<Product> findById(ProductId id);
+    Optional<ProductRoot> findById(ProductId id);
 
-    Optional<Product> findBySku(SKU sku);
+    Optional<ProductRoot> findBySku(SKU sku);
 
-    List<Product> findByCategory(CategoryReference category);
+    List<ProductRoot> findByCategory(CategoryReference category);
 
     void delete(ProductId id);
 }

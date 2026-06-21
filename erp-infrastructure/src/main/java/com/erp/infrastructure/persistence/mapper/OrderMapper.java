@@ -1,7 +1,7 @@
 package com.erp.infrastructure.persistence.mapper;
 
+import com.erp.domain.entities.OrderRoot;
 import com.erp.domain.order.Customer;
-import com.erp.domain.order.Order;
 import com.erp.domain.order.OrderId;
 import com.erp.domain.order.OrderItem;
 import com.erp.domain.order.OrderNumber;
@@ -23,12 +23,12 @@ public abstract class OrderMapper {
     @Autowired
     protected OrderItemMapper itemMapper;
 
-    public Order toDomain(OrderEntity e) {
+    public OrderRoot toDomain(OrderEntity e) {
         String currency = e.getCurrency();
         List<OrderItem> items = e.getItems().stream()
                 .map(item -> itemMapper.toDomain(item, currency))
                 .toList();
-        return Order.rehydrate(
+        return OrderRoot.rehydrate(
                 OrderId.of(e.getId()),
                 OrderNumber.of(e.getOrderNumber()),
                 Customer.of(CustomerId.of(e.getCustomerId()), e.getCustomerName()),
@@ -39,7 +39,7 @@ public abstract class OrderMapper {
         );
     }
 
-    public OrderEntity toEntity(Order order) {
+    public OrderEntity toEntity(OrderRoot order) {
         return OrderEntity.builder()
                 .id(order.getId().value())
                 .orderNumber(order.getOrderNumber().value())

@@ -1,6 +1,7 @@
 package com.erp.domain;
 
 import com.erp.domain.common.DomainEvent;
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.product.*;
 import com.erp.domain.product.events.ProductCreated;
 import com.erp.domain.product.events.ProductDeactivated;
@@ -19,8 +20,8 @@ class ProductTest {
 
     private static final Currency USD = Currency.getInstance("USD");
 
-    private static Product createValidProduct() {
-        return Product.create(
+    private static ProductRoot createValidProduct() {
+        return ProductRoot.create(
                 SKU.of("LAPTOP-001"),
                 ProductName.of("Test Laptop"),
                 "A test description",
@@ -38,7 +39,7 @@ class ProductTest {
 
     @Test
     void create_shouldCreateActiveProduct_whenValidArguments() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertNotNull(product.getId());
         assertEquals("LAPTOP-001", product.getSku().value());
@@ -52,7 +53,7 @@ class ProductTest {
 
     @Test
     void create_shouldRegisterProductCreatedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         List<DomainEvent> events = product.pullDomainEvents();
 
@@ -62,7 +63,7 @@ class ProductTest {
 
     @Test
     void create_shouldThrow_whenPriceIsZero() {
-        assertThrows(IllegalArgumentException.class, () -> Product.create(
+        assertThrows(IllegalArgumentException.class, () -> ProductRoot.create(
                 SKU.of("LAPTOP-001"),
                 ProductName.of("Test Laptop"),
                 "desc",
@@ -80,7 +81,7 @@ class ProductTest {
 
     @Test
     void update_shouldUpdateProductFields_whenValidArguments() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.update(
@@ -98,7 +99,7 @@ class ProductTest {
 
     @Test
     void update_shouldRegisterProductUpdatedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.update(
@@ -116,7 +117,7 @@ class ProductTest {
 
     @Test
     void update_shouldThrow_whenNewPriceIsZero() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertThrows(IllegalArgumentException.class, () -> product.update(
                 ProductName.of("Updated"),
@@ -133,7 +134,7 @@ class ProductTest {
 
     @Test
     void incrementStock_shouldIncreaseStock_whenValidQuantity() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.incrementStock(5, "restock");
@@ -143,7 +144,7 @@ class ProductTest {
 
     @Test
     void incrementStock_shouldRegisterStockChangedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.incrementStock(5, "restock");
@@ -162,7 +163,7 @@ class ProductTest {
 
     @Test
     void decrementStock_shouldDecreaseStock_whenValidQuantity() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.decrementStock(3, "sold");
@@ -172,7 +173,7 @@ class ProductTest {
 
     @Test
     void decrementStock_shouldRegisterStockChangedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.decrementStock(3, "sold");
@@ -184,7 +185,7 @@ class ProductTest {
 
     @Test
     void decrementStock_shouldThrow_whenInsufficientStock() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertThrows(IllegalArgumentException.class, () -> product.decrementStock(100, "sold"));
     }
@@ -195,7 +196,7 @@ class ProductTest {
 
     @Test
     void changePrice_shouldUpdatePrice_whenValidPrice() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.changePrice(Money.of(150.00, USD));
@@ -205,7 +206,7 @@ class ProductTest {
 
     @Test
     void changePrice_shouldRegisterProductUpdatedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.changePrice(Money.of(150.00, USD));
@@ -217,7 +218,7 @@ class ProductTest {
 
     @Test
     void changePrice_shouldThrow_whenPriceIsZero() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertThrows(IllegalArgumentException.class, () -> product.changePrice(Money.of(0.00, USD)));
     }
@@ -228,7 +229,7 @@ class ProductTest {
 
     @Test
     void deactivate_shouldSetActiveToFalse_whenProductIsActive() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.deactivate();
@@ -238,7 +239,7 @@ class ProductTest {
 
     @Test
     void deactivate_shouldRegisterProductDeactivatedEvent() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.pullDomainEvents();
 
         product.deactivate();
@@ -250,7 +251,7 @@ class ProductTest {
 
     @Test
     void deactivate_shouldThrow_whenProductIsAlreadyInactive() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.deactivate();
 
         assertThrows(IllegalStateException.class, product::deactivate);
@@ -262,7 +263,7 @@ class ProductTest {
 
     @Test
     void activate_shouldSetActiveToTrue_whenProductIsInactive() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
         product.deactivate();
 
         product.activate();
@@ -272,7 +273,7 @@ class ProductTest {
 
     @Test
     void activate_shouldThrow_whenProductIsAlreadyActive() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertThrows(IllegalStateException.class, product::activate);
     }
@@ -283,14 +284,14 @@ class ProductTest {
 
     @Test
     void hasAvailableStock_shouldReturnTrue_whenStockSufficient() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertTrue(product.hasAvailableStock(5));
     }
 
     @Test
     void hasAvailableStock_shouldReturnFalse_whenStockInsufficient() {
-        Product product = createValidProduct();
+        ProductRoot product = createValidProduct();
 
         assertFalse(product.hasAvailableStock(100));
     }

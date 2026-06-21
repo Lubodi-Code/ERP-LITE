@@ -1,7 +1,7 @@
 package com.erp.domain.order;
 
 import com.erp.domain.common.Entity;
-import com.erp.domain.product.Product;
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.shared.Money;
 import com.erp.domain.shared.Quantity;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class OrderItem extends Entity<OrderItemId> {
         return new OrderItem(id, productReference, productName, quantity, unitPrice, subtotal);
     }
 
-    public static OrderItem from(Product product, Quantity quantity) {
+    public static OrderItem from(ProductRoot product, Quantity quantity) {
         if (product == null) throw new IllegalArgumentException("Product must not be null");
         if (quantity == null) throw new IllegalArgumentException("Quantity must not be null");
         if (!product.isActive()) throw new IllegalArgumentException("Cannot order an inactive product");

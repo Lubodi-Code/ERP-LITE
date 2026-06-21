@@ -1,5 +1,6 @@
 package com.erp.domain;
 
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.order.OrderItem;
 import com.erp.domain.product.*;
 import com.erp.domain.shared.Money;
@@ -15,8 +16,8 @@ class OrderItemTest {
 
     private static final Currency USD = Currency.getInstance("USD");
 
-    private static Product createActiveProduct(int stock) {
-        return Product.create(
+    private static ProductRoot createActiveProduct(int stock) {
+        return ProductRoot.create(
                 SKU.of("LAPTOP-001"),
                 ProductName.of("Test Laptop"),
                 "Description",
@@ -34,7 +35,7 @@ class OrderItemTest {
 
     @Test
     void from_shouldCreateOrderItem_whenValidProductAndQuantity() {
-        Product product = createActiveProduct(10);
+        ProductRoot product = createActiveProduct(10);
         Quantity quantity = Quantity.of(2);
 
         OrderItem item = OrderItem.from(product, quantity);
@@ -48,7 +49,7 @@ class OrderItemTest {
 
     @Test
     void from_shouldCalculateSubtotalAsQuantityTimesUnitPrice() {
-        Product product = createActiveProduct(10);
+        ProductRoot product = createActiveProduct(10);
         Quantity quantity = Quantity.of(3);
 
         OrderItem item = OrderItem.from(product, quantity);
@@ -63,14 +64,14 @@ class OrderItemTest {
 
     @Test
     void from_shouldThrow_whenQuantityIsNull() {
-        Product product = createActiveProduct(10);
+        ProductRoot product = createActiveProduct(10);
 
         assertThrows(IllegalArgumentException.class, () -> OrderItem.from(product, null));
     }
 
     @Test
     void from_shouldThrow_whenProductIsInactive() {
-        Product product = createActiveProduct(10);
+        ProductRoot product = createActiveProduct(10);
         product.deactivate();
 
         assertThrows(IllegalArgumentException.class, () -> OrderItem.from(product, Quantity.of(1)));
@@ -78,7 +79,7 @@ class OrderItemTest {
 
     @Test
     void from_shouldThrow_whenInsufficientStock() {
-        Product product = createActiveProduct(2);
+        ProductRoot product = createActiveProduct(2);
 
         assertThrows(IllegalArgumentException.class, () -> OrderItem.from(product, Quantity.of(5)));
     }
@@ -89,7 +90,7 @@ class OrderItemTest {
 
     @Test
     void calculateSubtotal_shouldReturnQuantityTimesUnitPrice() {
-        Product product = createActiveProduct(10);
+        ProductRoot product = createActiveProduct(10);
         OrderItem item = OrderItem.from(product, Quantity.of(4));
 
         Money subtotal = item.calculateSubtotal();

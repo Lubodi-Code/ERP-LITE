@@ -1,6 +1,6 @@
 package com.erp.infrastructure.adapters;
 
-import com.erp.domain.ports.ImageStorageService;
+import com.erp.domain.ports.services.ImageServicePort;
 import com.erp.domain.product.ProductImage;
 import com.erp.domain.shared.FileUploadException;
 import com.erp.infrastructure.config.S3Properties;
@@ -19,7 +19,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class S3ImageStorageService implements ImageStorageService {
+public class S3ImageStorageService implements ImageServicePort {
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;

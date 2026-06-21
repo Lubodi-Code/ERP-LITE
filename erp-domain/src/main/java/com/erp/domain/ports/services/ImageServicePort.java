@@ -1,8 +1,8 @@
-package com.erp.domain.ports;
+package com.erp.domain.ports.services;
 
 import com.erp.domain.product.ProductImage;
 
-public interface ImageStorageService {
+public interface ImageServicePort {
 
     ProductImage upload(ProductImage image, String imageName, byte[] imageData);
 

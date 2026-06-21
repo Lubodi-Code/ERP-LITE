@@ -1,7 +1,7 @@
 package com.erp.infrastructure.persistence.mapper;
 
-import com.erp.domain.catalog.Catalog;
 import com.erp.domain.catalog.CatalogItem;
+import com.erp.domain.entities.CatalogRoot;
 import com.erp.infrastructure.persistence.mongo.document.CatalogDocument;
 import com.erp.infrastructure.persistence.mongo.document.CatalogItemDocument;
 import com.erp.infrastructure.persistence.mongo.document.CatalogItemMetadataDocument;
@@ -16,11 +16,11 @@ import java.util.Map;
 @Mapper(componentModel = "spring")
 public interface CatalogMapper {
 
-    default Catalog toDomain(CatalogDocument doc) {
+    default CatalogRoot toDomain(CatalogDocument doc) {
         List<CatalogItem> items = doc.getItems() != null
                 ? doc.getItems().stream().map(this::toDomainItem).toList()
                 : List.of();
-        return new Catalog(
+        return new CatalogRoot(
                 doc.getId(),
                 doc.getName(),
                 doc.getCatalogType(),
@@ -30,7 +30,7 @@ public interface CatalogMapper {
         );
     }
 
-    default CatalogDocument toDocument(Catalog catalog) {
+    default CatalogDocument toDocument(CatalogRoot catalog) {
         List<CatalogItemDocument> items = catalog.getItems().stream()
                 .map(this::toDocumentItem)
                 .toList();

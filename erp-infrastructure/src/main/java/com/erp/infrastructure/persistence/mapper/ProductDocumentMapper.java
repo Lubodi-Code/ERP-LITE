@@ -1,7 +1,7 @@
 package com.erp.infrastructure.persistence.mapper;
 
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.product.CategoryReference;
-import com.erp.domain.product.Product;
 import com.erp.domain.product.ProductId;
 import com.erp.domain.product.ProductImage;
 import com.erp.domain.product.ProductName;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface ProductDocumentMapper {
 
-    default ProductInCatalogDocument toDocument(Product product) {
+    default ProductInCatalogDocument toDocument(ProductRoot product) {
         return ProductInCatalogDocument.builder()
                 .id(product.getId().value().toString())
                 .active(product.isActive())
@@ -40,8 +40,8 @@ public interface ProductDocumentMapper {
                 .build();
     }
 
-    default Product toDomain(ProductInCatalogDocument doc) {
-        return Product.rehydrate(
+    default ProductRoot toDomain(ProductInCatalogDocument doc) {
+        return ProductRoot.rehydrate(
                 ProductId.of(UUID.fromString(doc.getId())),
                 SKU.of(doc.getSku()),
                 ProductName.of(doc.getName()),

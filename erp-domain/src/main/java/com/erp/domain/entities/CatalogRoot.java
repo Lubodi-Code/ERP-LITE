@@ -1,5 +1,7 @@
-package com.erp.domain.catalog;
+package com.erp.domain.entities;
 
+import com.erp.domain.catalog.CatalogItem;
+import com.erp.domain.catalog.CatalogType;
 import com.erp.domain.common.AggregateRoot;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import java.util.Optional;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class Catalog extends AggregateRoot<String> {
+public class CatalogRoot extends AggregateRoot<String> {
 
     private final String id;
     private final String name;
@@ -21,7 +23,7 @@ public class Catalog extends AggregateRoot<String> {
     private final List<CatalogItem> items;
     private final boolean isActive;
 
-    public Catalog(String id,
+    public CatalogRoot(String id,
                    String name,
                    CatalogType catalogType,
                    String description,

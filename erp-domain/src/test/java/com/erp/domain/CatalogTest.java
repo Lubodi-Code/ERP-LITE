@@ -1,7 +1,7 @@
 package com.erp.domain;
 
-import com.erp.domain.catalog.Catalog;
 import com.erp.domain.catalog.CatalogItem;
+import com.erp.domain.entities.CatalogRoot;
 import com.erp.domain.catalog.CatalogType;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +22,8 @@ class CatalogTest {
         return item;
     }
 
-    private static Catalog createCatalog(List<CatalogItem> items) {
-        return new Catalog("cat-001", "Product Categories", CatalogType.PRODUCT_CATEGORIES, "Desc", items, true);
+    private static CatalogRoot createCatalog(List<CatalogItem> items) {
+        return new CatalogRoot("cat-001", "Product Categories", CatalogType.PRODUCT_CATEGORIES, "Desc", items, true);
     }
 
     // -------------------------------------------------------------------------
@@ -32,7 +32,7 @@ class CatalogTest {
 
     @Test
     void constructor_shouldCreateCatalog_whenValidArguments() {
-        Catalog catalog = createCatalog(List.of());
+        CatalogRoot catalog = createCatalog(List.of());
 
         assertEquals("cat-001", catalog.getId());
         assertEquals("Product Categories", catalog.getName());
@@ -44,43 +44,43 @@ class CatalogTest {
     @Test
     void constructor_shouldThrow_whenIdIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Catalog(null, "Name", CatalogType.PRODUCT_CATEGORIES, null, null, true));
+                () -> new CatalogRoot(null, "Name", CatalogType.PRODUCT_CATEGORIES, null, null, true));
     }
 
     @Test
     void constructor_shouldThrow_whenIdIsBlank() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Catalog("  ", "Name", CatalogType.PRODUCT_CATEGORIES, null, null, true));
+                () -> new CatalogRoot("  ", "Name", CatalogType.PRODUCT_CATEGORIES, null, null, true));
     }
 
     @Test
     void constructor_shouldThrow_whenNameIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Catalog("cat-001", null, CatalogType.PRODUCT_CATEGORIES, null, null, true));
+                () -> new CatalogRoot("cat-001", null, CatalogType.PRODUCT_CATEGORIES, null, null, true));
     }
 
     @Test
     void constructor_shouldThrow_whenNameIsBlank() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Catalog("cat-001", "  ", CatalogType.PRODUCT_CATEGORIES, null, null, true));
+                () -> new CatalogRoot("cat-001", "  ", CatalogType.PRODUCT_CATEGORIES, null, null, true));
     }
 
     @Test
     void constructor_shouldThrow_whenCatalogTypeIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Catalog("cat-001", "Name", null, null, null, true));
+                () -> new CatalogRoot("cat-001", "Name", null, null, null, true));
     }
 
     @Test
     void constructor_shouldInitializeEmptyList_whenItemsIsNull() {
-        Catalog catalog = new Catalog("cat-001", "Name", CatalogType.COUNTRIES, null, null, true);
+        CatalogRoot catalog = new CatalogRoot("cat-001", "Name", CatalogType.COUNTRIES, null, null, true);
 
         assertTrue(catalog.findAll().isEmpty());
     }
 
     @Test
     void constructor_shouldAllowNullDescription() {
-        assertDoesNotThrow(() -> new Catalog("cat-001", "Name", CatalogType.CURRENCIES, null, List.of(), true));
+        assertDoesNotThrow(() -> new CatalogRoot("cat-001", "Name", CatalogType.CURRENCIES, null, List.of(), true));
     }
 
     // -------------------------------------------------------------------------
@@ -90,7 +90,7 @@ class CatalogTest {
     @Test
     void findItemByCode_shouldReturnItem_whenCodeExists() {
         CatalogItem item = activeItem("1", "CODE_01");
-        Catalog catalog = createCatalog(List.of(item));
+        CatalogRoot catalog = createCatalog(List.of(item));
 
         Optional<CatalogItem> result = catalog.findItemByCode("CODE_01");
 
@@ -100,7 +100,7 @@ class CatalogTest {
 
     @Test
     void findItemByCode_shouldReturnEmpty_whenCodeDoesNotExist() {
-        Catalog catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
+        CatalogRoot catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
 
         Optional<CatalogItem> result = catalog.findItemByCode("MISSING");
 
@@ -113,14 +113,14 @@ class CatalogTest {
 
     @Test
     void containsItemByCode_shouldReturnTrue_whenCodeExists() {
-        Catalog catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
+        CatalogRoot catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
 
         assertTrue(catalog.containsItemByCode("CODE_01"));
     }
 
     @Test
     void containsItemByCode_shouldReturnFalse_whenCodeDoesNotExist() {
-        Catalog catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
+        CatalogRoot catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
 
         assertFalse(catalog.containsItemByCode("MISSING"));
     }
@@ -133,7 +133,7 @@ class CatalogTest {
     void findActiveItems_shouldReturnOnlyActiveItems() {
         CatalogItem active = activeItem("1", "ACTIVE");
         CatalogItem inactive = inactiveItem("2", "INACTIVE");
-        Catalog catalog = createCatalog(List.of(active, inactive));
+        CatalogRoot catalog = createCatalog(List.of(active, inactive));
 
         List<CatalogItem> result = catalog.findActiveItems();
 
@@ -143,7 +143,7 @@ class CatalogTest {
 
     @Test
     void findActiveItems_shouldReturnEmptyList_whenNoActiveItems() {
-        Catalog catalog = createCatalog(List.of(inactiveItem("1", "INACTIVE")));
+        CatalogRoot catalog = createCatalog(List.of(inactiveItem("1", "INACTIVE")));
 
         List<CatalogItem> result = catalog.findActiveItems();
 
@@ -158,7 +158,7 @@ class CatalogTest {
     void findAll_shouldReturnAllItems_includingInactive() {
         CatalogItem active = activeItem("1", "ACTIVE");
         CatalogItem inactive = inactiveItem("2", "INACTIVE");
-        Catalog catalog = createCatalog(List.of(active, inactive));
+        CatalogRoot catalog = createCatalog(List.of(active, inactive));
 
         List<CatalogItem> result = catalog.findAll();
 
@@ -167,7 +167,7 @@ class CatalogTest {
 
     @Test
     void findAll_shouldReturnUnmodifiableList() {
-        Catalog catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
+        CatalogRoot catalog = createCatalog(List.of(activeItem("1", "CODE_01")));
 
         List<CatalogItem> result = catalog.findAll();
 

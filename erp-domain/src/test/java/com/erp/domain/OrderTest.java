@@ -1,6 +1,8 @@
 package com.erp.domain;
 
 import com.erp.domain.common.DomainEvent;
+import com.erp.domain.entities.OrderRoot;
+import com.erp.domain.entities.ProductRoot;
 import com.erp.domain.order.*;
 import com.erp.domain.order.events.*;
 import com.erp.domain.product.*;
@@ -20,8 +22,8 @@ class OrderTest {
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency EUR = Currency.getInstance("EUR");
 
-    private static Product createProduct(int stock, double price, Currency currency) {
-        return Product.create(
+    private static ProductRoot createProduct(int stock, double price, Currency currency) {
+        return ProductRoot.create(
                 SKU.of("PROD-001"),
                 ProductName.of("Test Product"),
                 "Description",
@@ -34,7 +36,7 @@ class OrderTest {
     }
 
     private static OrderItem createOrderItem(int stock) {
-        Product product = createProduct(stock, 100.00, USD);
+        ProductRoot product = createProduct(stock, 100.00, USD);
         return OrderItem.from(product, Quantity.of(1));
     }
 
@@ -42,8 +44,8 @@ class OrderTest {
         return Customer.of(CustomerId.of(1L), "Test Customer");
     }
 
-    private static Order createPendingOrder() {
-        return Order.create(
+    private static OrderRoot createPendingOrder() {
+        return OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"),
                 createCustomer(),
                 List.of(createOrderItem(10)),
@@ -57,7 +59,7 @@ class OrderTest {
 
     @Test
     void create_shouldCreatePendingOrder_whenValidArguments() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertNotNull(order.getId());
         assertEquals("ORD-2025-001", order.getOrderNumber().value());
@@ -69,14 +71,14 @@ class OrderTest {
 
     @Test
     void create_shouldSetTotalAsItemSubtotal() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertEquals(0, BigDecimal.valueOf(100.00).compareTo(order.getTotalAmount().amount()));
     }
 
     @Test
     void create_shouldRegisterOrderCreatedEvent() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         List<DomainEvent> events = order.pullDomainEvents();
 
@@ -86,36 +88,36 @@ class OrderTest {
 
     @Test
     void create_shouldThrow_whenOrderNumberIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> Order.create(
+        assertThrows(IllegalArgumentException.class, () -> OrderRoot.create(
                 null, createCustomer(), List.of(createOrderItem(10)), "admin"));
     }
 
     @Test
     void create_shouldThrow_whenCustomerIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> Order.create(
+        assertThrows(IllegalArgumentException.class, () -> OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"), null, List.of(createOrderItem(10)), "admin"));
     }
 
     @Test
     void create_shouldThrow_whenItemsIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> Order.create(
+        assertThrows(IllegalArgumentException.class, () -> OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"), createCustomer(), null, "admin"));
     }
 
     @Test
     void create_shouldThrow_whenItemsIsEmpty() {
-        assertThrows(IllegalArgumentException.class, () -> Order.create(
+        assertThrows(IllegalArgumentException.class, () -> OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"), createCustomer(), List.of(), "admin"));
     }
 
     @Test
     void create_shouldThrow_whenItemsHaveMixedCurrencies() {
-        Product usdProduct = createProduct(10, 100.00, USD);
-        Product eurProduct = createProduct(10, 50.00, EUR);
+        ProductRoot usdProduct = createProduct(10, 100.00, USD);
+        ProductRoot eurProduct = createProduct(10, 50.00, EUR);
         OrderItem usdItem = OrderItem.from(usdProduct, Quantity.of(1));
         OrderItem eurItem = OrderItem.from(eurProduct, Quantity.of(1));
 
-        assertThrows(IllegalArgumentException.class, () -> Order.create(
+        assertThrows(IllegalArgumentException.class, () -> OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"), createCustomer(), List.of(usdItem, eurItem), "admin"));
     }
 
@@ -125,7 +127,7 @@ class OrderTest {
 
     @Test
     void confirm_shouldSetStatusToConfirmed_whenOrderIsPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.pullDomainEvents();
 
         order.confirm();
@@ -135,7 +137,7 @@ class OrderTest {
 
     @Test
     void confirm_shouldRegisterOrderConfirmedEvent() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.pullDomainEvents();
 
         order.confirm();
@@ -147,7 +149,7 @@ class OrderTest {
 
     @Test
     void confirm_shouldThrow_whenOrderIsNotPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
 
         assertThrows(IllegalStateException.class, order::confirm);
@@ -159,7 +161,7 @@ class OrderTest {
 
     @Test
     void ship_shouldSetStatusToShipped_whenOrderIsConfirmed() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.pullDomainEvents();
 
@@ -170,7 +172,7 @@ class OrderTest {
 
     @Test
     void ship_shouldRegisterOrderShippedEvent() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.pullDomainEvents();
 
@@ -183,7 +185,7 @@ class OrderTest {
 
     @Test
     void ship_shouldThrow_whenOrderIsNotConfirmed() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertThrows(IllegalStateException.class, order::ship);
     }
@@ -194,7 +196,7 @@ class OrderTest {
 
     @Test
     void deliver_shouldSetStatusToDelivered_whenOrderIsShipped() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.ship();
         order.pullDomainEvents();
@@ -206,7 +208,7 @@ class OrderTest {
 
     @Test
     void deliver_shouldRegisterOrderDeliveredEvent() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.ship();
         order.pullDomainEvents();
@@ -220,7 +222,7 @@ class OrderTest {
 
     @Test
     void deliver_shouldThrow_whenOrderIsNotShipped() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
 
         assertThrows(IllegalStateException.class, order::deliver);
@@ -232,7 +234,7 @@ class OrderTest {
 
     @Test
     void cancel_shouldSetStatusToCancelled_whenOrderIsPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.pullDomainEvents();
 
         order.cancel("Customer request");
@@ -242,7 +244,7 @@ class OrderTest {
 
     @Test
     void cancel_shouldSetStatusToCancelled_whenOrderIsConfirmed() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.pullDomainEvents();
 
@@ -253,7 +255,7 @@ class OrderTest {
 
     @Test
     void cancel_shouldRegisterOrderCancelledEvent() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.pullDomainEvents();
 
         order.cancel("Customer request");
@@ -266,21 +268,21 @@ class OrderTest {
 
     @Test
     void cancel_shouldThrow_whenReasonIsNull() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertThrows(IllegalArgumentException.class, () -> order.cancel(null));
     }
 
     @Test
     void cancel_shouldThrow_whenReasonIsBlank() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertThrows(IllegalArgumentException.class, () -> order.cancel("  "));
     }
 
     @Test
     void cancel_shouldThrow_whenOrderIsDelivered() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.ship();
         order.deliver();
@@ -290,7 +292,7 @@ class OrderTest {
 
     @Test
     void cancel_shouldThrow_whenOrderIsShipped() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         order.ship();
 
@@ -303,7 +305,7 @@ class OrderTest {
 
     @Test
     void addItem_shouldAddItemAndRecalculateTotal_whenOrderIsPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.pullDomainEvents();
         OrderItem newItem = createOrderItem(5);
 
@@ -315,14 +317,14 @@ class OrderTest {
 
     @Test
     void addItem_shouldThrow_whenItemIsNull() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertThrows(IllegalArgumentException.class, () -> order.addItem(null));
     }
 
     @Test
     void addItem_shouldThrow_whenOrderIsNotPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         order.confirm();
         OrderItem item = createOrderItem(5);
 
@@ -337,7 +339,7 @@ class OrderTest {
     void removeItem_shouldRemoveItemAndRecalculateTotal_whenOrderIsPending() {
         OrderItem item1 = createOrderItem(10);
         OrderItem item2 = createOrderItem(10);
-        Order order = Order.create(
+        OrderRoot order = OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"),
                 createCustomer(),
                 List.of(item1, item2),
@@ -353,14 +355,14 @@ class OrderTest {
 
     @Test
     void removeItem_shouldThrow_whenItemIsNull() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         assertThrows(IllegalArgumentException.class, () -> order.removeItem(null));
     }
 
     @Test
     void removeItem_shouldThrow_whenOrderIsNotPending() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         OrderItem item = order.getItems().get(0);
         order.confirm();
 
@@ -369,7 +371,7 @@ class OrderTest {
 
     @Test
     void removeItem_shouldThrow_whenItemNotFoundInOrder() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
         OrderItem unrelatedItem = createOrderItem(5);
 
         assertThrows(IllegalArgumentException.class, () -> order.removeItem(unrelatedItem));
@@ -378,7 +380,7 @@ class OrderTest {
     @Test
     void removeItem_shouldThrow_whenRemovingLastItem() {
         OrderItem item = createOrderItem(10);
-        Order order = Order.create(
+        OrderRoot order = OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"),
                 createCustomer(),
                 List.of(item),
@@ -394,7 +396,7 @@ class OrderTest {
 
     @Test
     void validateItems_shouldThrow_whenItemListIsEmpty() {
-        Order order = createPendingOrder();
+        OrderRoot order = createPendingOrder();
 
         order.getItems().clear();
 
@@ -409,7 +411,7 @@ class OrderTest {
     void calculateTotal_shouldReturnSumOfItemSubtotals() {
         OrderItem item1 = createOrderItem(10);
         OrderItem item2 = createOrderItem(10);
-        Order order = Order.create(
+        OrderRoot order = OrderRoot.create(
                 OrderNumber.of("ORD-2025-001"),
                 createCustomer(),
                 List.of(item1, item2),

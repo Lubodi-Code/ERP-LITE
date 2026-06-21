@@ -1,6 +1,6 @@
 package com.erp.infrastructure.aws.adapters;
 
-import com.erp.domain.ports.ImageStorageService;
+import com.erp.domain.ports.services.ImageServicePort;
 import com.erp.domain.product.ProductImage;
 import com.erp.domain.shared.FileUploadException;
 import com.erp.infrastructure.aws.AwsConfigModel;
@@ -21,7 +21,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 @Service
 @Primary
 @RequiredArgsConstructor
-public class AwsImageStorageService implements ImageStorageService {
+public class AwsImageStorageService implements ImageServicePort {
 
     private final S3Client s3Client;
     private final AwsConfigModel awsConfig;

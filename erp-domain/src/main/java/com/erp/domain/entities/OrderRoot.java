@@ -1,6 +1,11 @@
-package com.erp.domain.order;
+package com.erp.domain.entities;
 
 import com.erp.domain.common.AggregateRoot;
+import com.erp.domain.order.Customer;
+import com.erp.domain.order.OrderId;
+import com.erp.domain.order.OrderItem;
+import com.erp.domain.order.OrderNumber;
+import com.erp.domain.order.OrderStatus;
 import com.erp.domain.order.events.OrderCancelled;
 import com.erp.domain.order.events.OrderConfirmed;
 import com.erp.domain.order.events.OrderCreated;
@@ -20,7 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Order extends AggregateRoot<OrderId> {
+public class OrderRoot extends AggregateRoot<OrderId> {
 
     private OrderId id;
     private OrderNumber orderNumber;
@@ -30,7 +35,7 @@ public class Order extends AggregateRoot<OrderId> {
     private Money totalAmount;
     private AuditInfo auditInfo;
 
-    Order(OrderId id, OrderNumber orderNumber, Customer customer, OrderStatus status,
+    OrderRoot(OrderId id, OrderNumber orderNumber, Customer customer, OrderStatus status,
           List<OrderItem> items, Money totalAmount, AuditInfo auditInfo) {
         this.id = id;
         this.orderNumber = orderNumber;
@@ -41,13 +46,13 @@ public class Order extends AggregateRoot<OrderId> {
         this.auditInfo = auditInfo;
     }
 
-    public static Order rehydrate(OrderId id, OrderNumber orderNumber, Customer customer,
+    public static OrderRoot rehydrate(OrderId id, OrderNumber orderNumber, Customer customer,
                                   OrderStatus status, List<OrderItem> items,
                                   Money totalAmount, AuditInfo auditInfo) {
-        return new Order(id, orderNumber, customer, status, items, totalAmount, auditInfo);
+        return new OrderRoot(id, orderNumber, customer, status, items, totalAmount, auditInfo);
     }
 
-    public static Order create(OrderNumber orderNumber, Customer customer,
+    public static OrderRoot create(OrderNumber orderNumber, Customer customer,
                                List<OrderItem> items, String createdBy) {
         if (orderNumber == null) throw new IllegalArgumentException("OrderNumber must not be null");
         if (customer == null) throw new IllegalArgumentException("Customer must not be null");
@@ -60,7 +65,7 @@ public class Order extends AggregateRoot<OrderId> {
         AuditInfo audit = AuditInfo.create(createdBy, Instant.now());
         Money total = calculateTotal(items);
 
-        Order order = new Order(id, orderNumber, customer, OrderStatus.pending(), items, total, audit);
+        OrderRoot order = new OrderRoot(id, orderNumber, customer, OrderStatus.pending(), items, total, audit);
         order.registerEvent(new OrderCreated(
                 id, customer.customerId(), customer.customerName(), total, audit.createdAt()));
         return order;

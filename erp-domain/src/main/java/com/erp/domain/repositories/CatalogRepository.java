@@ -1,18 +1,18 @@
 package com.erp.domain.repositories;
 
-import com.erp.domain.catalog.Catalog;
 import com.erp.domain.catalog.CatalogType;
+import com.erp.domain.entities.CatalogRoot;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CatalogRepository {
 
-    Optional<Catalog> findById(String id);
+    Optional<CatalogRoot> findById(String id);
 
-    Optional<Catalog> findByType(CatalogType catalogType);
+    Optional<CatalogRoot> findByType(CatalogType catalogType);
 
-    List<Catalog> findAll();
+    List<CatalogRoot> findAll();
 
-    List<Catalog> findAllActive();
+    List<CatalogRoot> findAllActive();
 }
