@@ -51,7 +51,10 @@ public class OrderEntity {
     @Column(name = "created_by", length = 100, nullable = false)
     private String createdBy;
 
-    @Column(name = "order_date", nullable = false)
+    // updatable=false: order_date is set once on insert (@PrePersist). The mapper does not
+    // carry it, so on UPDATE it would be null and break the NOT NULL constraint. Excluding it
+    // from UPDATE statements preserves the original value.
+    @Column(name = "order_date", nullable = false, updatable = false)
     private Instant orderDate;
 
     @Builder.Default

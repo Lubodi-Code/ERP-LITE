@@ -1,3 +1,14 @@
 dependencies {
     implementation project(':erp-domain')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly    'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    testLogging {
+        showStandardStreams = true   // surface the use-case logs (the flow) in the test output
+        events 'passed', 'failed'
+        exceptionFormat 'short'
+    }
 }
