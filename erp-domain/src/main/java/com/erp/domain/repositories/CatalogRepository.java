@@ -1,18 +1,17 @@
 package com.erp.domain.repositories;
 
-import com.erp.domain.catalog.CatalogType;
-import com.erp.domain.entities.CatalogRoot;
+import com.erp.domain.vistas.CatalogView;
+import com.erp.domain.vistas.ItemsView;
 
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for Catalog queries (CQRS read side).
+ * Returns views optimized for display.
+ */
 public interface CatalogRepository {
 
-    Optional<CatalogRoot> findById(String id);
+    Optional<CatalogView> findByType(String type);
 
-    Optional<CatalogRoot> findByType(CatalogType catalogType);
-
-    List<CatalogRoot> findAll();
-
-    List<CatalogRoot> findAllActive();
+    Optional<ItemsView> findByTypeAndCode(String type, String code);
 }

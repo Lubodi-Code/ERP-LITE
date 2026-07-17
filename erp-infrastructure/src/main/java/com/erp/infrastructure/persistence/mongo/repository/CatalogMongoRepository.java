@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface CatalogMongoRepository extends MongoRepository<CatalogDocument, String> {
 
     Optional<CatalogDocument> findByCatalogType(CatalogType catalogType);
+
+    Optional<CatalogDocument> findByCatalogType(String catalogType);
 }

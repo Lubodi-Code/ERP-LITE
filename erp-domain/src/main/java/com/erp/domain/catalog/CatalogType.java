@@ -1,57 +1,49 @@
 package com.erp.domain.catalog;
 
-import lombok.Getter;
+import java.util.Arrays;
 
 /**
  * Types of catalogs available in the system.
- * These values match the catalogType field in MongoDB catalogs collection.
+ * Simplified enum for CQRS read models.
  */
-@Getter
 public enum CatalogType {
-    
-    PRODUCT_CATEGORIES("PRODUCT_CATEGORIES", "Product Categories"),
-    ORDER_STATUSES("ORDER_STATUSES", "Order Statuses"),
-    PAYMENT_METHODS("PAYMENT_METHODS", "Payment Methods"),
-    SHIPPING_METHODS("SHIPPING_METHODS", "Shipping Methods"),
-    COUNTRIES("COUNTRIES", "Countries"),
-    CURRENCIES("CURRENCIES", "Currencies");
+    PRODUCT_CATEGORIES("Product Categories"),
+    ORDER_STATUSES("Order Statuses"),
+    PAYMENT_METHODS("Payment Methods"),
+    SHIPPING_METHODS("Shipping Methods"),
+    COUNTRIES("Countries"),
+    CURRENCIES("Currencies");
 
-    private final String code;
     private final String displayName;
 
-    CatalogType(String code, String displayName) {
-        this.code = code;
+    CatalogType(String displayName) {
         this.displayName = displayName;
     }
 
-    /**
-     * Convert string code to enum (case-sensitive)
-     * @throws IllegalArgumentException if code is invalid
-     */
+    public String getCode() {
+        return name();
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
     public static CatalogType fromCode(String code) {
         if (code == null || code.isBlank()) {
-            throw new IllegalArgumentException("Catalog type code cannot be null or empty");
+            throw new IllegalArgumentException("Catalog type code cannot be null or blank");
         }
-        
-        for (CatalogType type : values()) {
-            if (type.code.equals(code)) {
-                return type;
-            }
+        try {
+            return valueOf(code);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Unknown catalog type: " + code);
         }
-        
-        throw new IllegalArgumentException(
-            "Invalid catalog type code: '" + code + "'. " +
-            "Valid values are: PRODUCT_CATEGORIES, ORDER_STATUSES, " +
-            "PAYMENT_METHODS, SHIPPING_METHODS, COUNTRIES, CURRENCIES"
-        );
     }
 
     public static boolean isValid(String code) {
-        try {
-            fromCode(code);
-            return true;
-        } catch (IllegalArgumentException e) {
+        if (code == null || code.isBlank()) {
             return false;
         }
+        return Arrays.stream(values())
+                .anyMatch(t -> t.name().equals(code));
     }
 }
