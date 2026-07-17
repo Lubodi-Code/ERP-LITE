@@ -1,0 +1,8 @@
+json-placeholder:
+  api:
+    base-url: https://jsonplaceholder.typicode.com
+    endpoints:
+      - /users
+    connect-timeout: 5000
+    read-timeout: 5000
+    enabled: true

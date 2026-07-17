@@ -1,0 +1,2 @@
+# Esta carpeta contiene las vistas de CQRS (lectura desde MongoDB)
+# Aquí vivirán todos los records inmutables para consultas
